@@ -9,7 +9,7 @@ unsigned int g_VgaY = 0;
 const unsigned int g_VgaWidth = 80;
 const unsigned int g_VgaHeight = 25;
 
-uint8_t g_Color = 0x07;
+const uint8_t g_Color = 0x07;
 
 void VgaPutChar(char c, unsigned int x, unsigned int y, uint8_t color)
 {
@@ -37,14 +37,13 @@ void VgaSetCursor(unsigned int x, unsigned int y)
     outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
 }
 
-void VgaClear(uint8_t color)
+void VgaClear()
 {
     for (int y = 0; y < g_VgaHeight; y++)
         for (int x = 0; x < g_VgaWidth; x++)
-            VgaPutChar('\0', x, y, color);
+            VgaPutChar('\0', x, y, g_Color);
 
     g_VgaX = 0, g_VgaY = 0;
-    g_Color = color;
     VgaSetCursor(g_VgaX, g_VgaY);
 }
 
@@ -61,7 +60,7 @@ void VgaScrollBack(int lines)
     g_VgaY -= lines;
 }
 
-void VgaPutc(char c, int colored, uint8_t color)
+void VgaPutc(char c)
 {
     switch (c)
     {
@@ -71,13 +70,13 @@ void VgaPutc(char c, int colored, uint8_t color)
             break;
         case '\t':
             for (int i = 0; i < 4 - (g_VgaX % 4); i++)
-                VgaPutc(' ', 1, !colored ? g_Color : color);
+                VgaPutc(' ');
             break;
         case '\r':
             g_VgaX = 0;
             break;
         default:
-            VgaPutChar(c, g_VgaX, g_VgaY, !colored ? g_Color : color);
+            VgaPutChar(c, g_VgaX, g_VgaY, g_Color);
             g_VgaX++;
             break;
     }

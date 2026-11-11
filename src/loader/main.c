@@ -4,9 +4,10 @@
 
 void main(uint16_t bootDrive)
 {
-    VgaClear(0x0E);
+    VgaClear();
 
-    puts("Executing loader...\n");
+    printf("Executing loader...\n");
+    printf("bootDrive=%xh\n", bootDrive);
 
     for (;;);
 }
