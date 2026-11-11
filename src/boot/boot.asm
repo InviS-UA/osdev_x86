@@ -45,18 +45,9 @@ start:
     mov bx, 0x500
 
     mov cx, [loaderSectors]
-
-.readLoop:
-    push cx
     mov ax, 1
-    mov cl, 1
     mov dl, [DriveNumber]
     call ReadSectors
-    pop cx
-
-    add bx, [BytesPerSector]
-
-    loop .readLoop
 
     mov dl, [DriveNumber]
 
@@ -66,9 +57,8 @@ start:
 
     jmp 0x0:0x500
 
-.halt:
     cli
-    jmp .halt
+    hlt
 
 Print:
     push si

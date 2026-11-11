@@ -57,5 +57,5 @@ mkfs_fat(target,
 install_boot(target, f'{BUILD_DIR}/boot.bin', loader_sectors)
 install_loader(target, f'{BUILD_DIR}/loader.bin', 1)
 
-for file in glob.glob(f'{PROJ_DIR}/image/*', recursive=True):
+for file in glob.glob(f'{PROJ_DIR}/image/root/*', recursive=True):
     sh.mcopy('-i', target, '-s', file, '::/')

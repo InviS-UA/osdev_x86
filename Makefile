@@ -2,12 +2,14 @@ include config.mk
 
 .PHONY: all image boot loader run clean
 
+include scripts/toolchain.mk
+
 all: image
 
 image: $(BUILD_DIR)/floppy.img
 
 $(BUILD_DIR)/floppy.img: boot loader
-	@python3 scripts/image.py $@
+	@python3 image/build.py $@
 
 boot:
 	@$(MAKE) -C src/boot
