@@ -57,5 +57,7 @@ mkfs_fat(target,
 install_boot(target, f'{BUILD_DIR}/boot.bin', loader_sectors)
 install_loader(target, f'{BUILD_DIR}/loader.bin', 1)
 
+sh.mcopy('-i', target, f'{BUILD_DIR}/kernel.sys', '::/kernel.sys')
+
 for file in glob.glob(f'{PROJ_DIR}/image/*', recursive=True):
     sh.mcopy('-i', target, '-s', file, '::/')

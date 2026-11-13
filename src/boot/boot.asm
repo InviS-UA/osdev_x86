@@ -43,21 +43,11 @@ start:
     xor bx, bx
     mov es, bx
     mov bx, 0x500
-
-    mov cx, [loaderSectors]
-
-.readLoop:
-    push cx
+    
     mov ax, 1
-    mov cl, 1
+    mov cx, [loaderSectors]
     mov dl, [DriveNumber]
     call ReadSectors
-    pop cx
-
-    add bx, [BytesPerSector]
-
-    loop .readLoop
-
     mov dl, [DriveNumber]
 
     xor ax, ax
