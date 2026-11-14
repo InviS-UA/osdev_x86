@@ -1,23 +1,49 @@
-%include "defs.inc"
-%include "macro.inc"
-
-org 0x9000
+org 0x500
 bits 16
 
-jmp start
+main:
+    cli
 
-%include "print16.inc"
-
-start:
     xor ax, ax
     mov ds, ax
     mov es, ax
 
+    mov ax, ds
+    mov ss, ax
+    mov sp, 0xFFF0
+
+    sti
+
     mov si, msg
     call Print
 
-.halt:
     cli
-    jmp .halt
+    hlt
 
-msg: db 'Hello from kernel!', ENDL, 0
+;
+; Prints string to the screen
+;   ds:si <- target string
+;
+Print:
+    push ax
+    push bx
+    push si
+
+.loop:
+    lodsb
+    or al, al
+    jz .ret
+
+    mov ah, 0Eh
+    mov bh, 0
+    int 0x10
+
+    jmp .loop
+
+.ret:
+    pop si
+    pop bx
+    pop ax
+    ret
+
+msg: db 'Hello from kernel!', 13, 10, 0

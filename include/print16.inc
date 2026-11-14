@@ -8,7 +8,9 @@
 ;   ds:si <- target string
 ;
 Print:
-    PUSH_MULTI ax, bx, si
+    push ax
+    push bx
+    push si
 
 .loop:
     lodsb
@@ -22,8 +24,9 @@ Print:
     jmp .loop
 
 .ret:
-    POP_MULTI ax, bx, si
-    
+    pop si
+    pop bx
+    pop ax
     ret
 
 %endif

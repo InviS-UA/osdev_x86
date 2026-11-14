@@ -40,14 +40,101 @@ start:
     mov si, msgLoading
     call Print
 
+    mov ax, [SectorsPerFAT]
+    mov bl, [FATCount]
+    xor bh, bh
+    mul bx
+    add ax, [ReservedSectors]
+    mov word [dataSector], ax
+    push ax
+
+    mov ax, [RootDirEntries]
+    shl ax, 5
+    xor dx, dx
+    div word [BytesPerSector]
+
+    test dx, dx
+    jz .loadRoot
+    inc ax
+
+.loadRoot:
+    add word [dataSector], ax
+    mov cl, al
+    pop ax
+    mov dl, [DriveNumber]
+    mov bx, buffer
+    call ReadSectors
+    
+    xor bx, bx
+    mov di, buffer
+
+.searchKernel:
+    mov si, fileKernelSys
+    mov cx, 11
+    push di
+    repe cmpsb
+    pop di
+    je .found
+
+    add di, 32
+    inc bx
+    cmp bx, [RootDirEntries]
+    jl .searchKernel
+
+    jmp KernelNotFound
+
+.found:
+    mov ax, [di + 26]
+    mov [cluster], ax
+
+    mov dl, [DriveNumber]
+    mov ax, [ReservedSectors]
+    mov cl, [SectorsPerFAT]
+    mov bx, buffer
+    call ReadSectors
+
     xor bx, bx
     mov es, bx
     mov bx, 0x500
     
-    mov ax, 1
-    mov cx, [loaderSectors]
+.loadKernel:
+    mov ax, [cluster]
+    call Cluster2LBA
+    add ax, [dataSector]
+
     mov dl, [DriveNumber]
+    mov cl, 1
     call ReadSectors
+
+    add bx, [BytesPerSector]
+
+    mov ax, [cluster]
+    mov cx, 3
+    mul cx
+    mov cx, 2
+    div cx
+
+    mov si, buffer
+    add si, ax
+    mov ax, [ds:si]
+
+    or dx, dx
+    jz .evenCluster
+
+    shr ax, 4
+    jmp .nextCluster
+
+.evenCluster:
+    and ax, 0x0FFF
+
+.nextCluster:
+    cmp ax, 0x0FF8
+    jae .finish
+
+    mov [cluster], ax
+    jmp .loadKernel
+
+.finish:
     mov dl, [DriveNumber]
 
     xor ax, ax
@@ -56,9 +143,8 @@ start:
 
     jmp 0x0:0x500
 
-.halt:
     cli
-    jmp .halt
+    hlt
 
 Print:
     push si
@@ -106,11 +192,17 @@ LBA2CHS:
 
     ret
 
+Cluster2LBA:
+    sub ax, 2
+    movzx cx, byte [SectorsPerCluster]
+    mul cx
+    ret
+
 ReadSectors:
     push ax
     push bx
-    push dx
     push cx
+    push dx
     push di
 
     push cx
@@ -132,23 +224,29 @@ ReadSectors:
     popa
 
     dec di
+    test di, di
     jnz .loop
 
 .fail:
     jmp ReadError
 
 .ret:
-    pop di
-    pop cx
-    pop dx
-    pop bx
-    pop ax
     popa
 
+    pop di
+    pop dx
+    pop cx
+    pop bx
+    pop ax
     ret
 
 ReadError:
-    mov si, msgError
+    mov si, msgReadError
+    call Print
+    jmp Reboot
+
+KernelNotFound:
+    mov si, msgKernelNotFound
     call Print
     jmp Reboot
 
@@ -158,11 +256,11 @@ Reboot:
     jmp 0xFFFF:0x0
 
 msgLoading:             db 'Booting OS...', 13, 10, 0
-msgError:               db 'Read disk failed!', 13, 10, 0
-
-times 508 - ($ - $$) db 0
-
-loaderSectors:          dw 0
+msgReadError:           db 'Read disk failed!', 13, 10, 0
+msgKernelNotFound:      db 'KERNEL.SYS not found!', 13, 10, 0
+fileKernelSys:          db 'KERNEL  SYS'
+cluster:                dw 0
+dataSector:             dw 0
 
 times 510 - ($ - $$) db 0
 dw 0AA55h

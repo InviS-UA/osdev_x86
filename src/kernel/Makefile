@@ -1,4 +1,4 @@
-ASMFLAGS += -I$(PROJ_DIR)/include -f bin
+ASMFLAGS += -I$(PROJ_DIR)/include -I. -f bin
 
 .PHONY: all
 
