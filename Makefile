@@ -1,24 +1,25 @@
 include config.mk
 
-.PHONY: all image boot loader run clean
-
-include scripts/toolchain.mk
+.PHONY: all image boot kernel run debug clean
 
 all: image
 
 image: $(BUILD_DIR)/floppy.img
 
-$(BUILD_DIR)/floppy.img: boot loader
-	@python3 image/build.py $@
+$(BUILD_DIR)/floppy.img: boot kernel
+	@python3 scripts/image.py $@
 
 boot:
 	@$(MAKE) -C src/boot
 
-loader:
-	@$(MAKE) -C src/loader
+kernel:
+	@$(MAKE) -C src/kernel
 
 run: $(BUILD_DIR)/floppy.img
 	@qemu-system-i386 -fda $<
+
+debug: $(BUILD_DIR)/floppy.img
+	@bochs -f bochsrc.cfg
 
 clean:
 	@echo "Cleaning..."

@@ -1,6 +1,6 @@
 ENTRY(start)
 OUTPUT_FORMAT("binary")
-phys = 0x00000500;
+phys = 0x500;
 
 SECTIONS
 {
@@ -11,6 +11,6 @@ SECTIONS
     .data               : { __data_start = .;       *(.data)    }
     .rodata             : { __rodata_start = .;     *(.rodata)  }
     .bss                : { __bss_start = .;        *(.bss)     }
-
+    
     __end = .;
 }
