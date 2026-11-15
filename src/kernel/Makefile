@@ -14,7 +14,7 @@ all: $(BUILD_DIR)/kernel.sys
 
 $(BUILD_DIR)/kernel.sys: $(OBJ_FILES)
 	@echo "LD " $@
-	@$(LINK) $(LINKFLAGS) -o $@ $^
+	@$(LINK) $(LINKFLAGS) -Wl,-Map=$(BUILD_DIR)/kernel.map -o $@ $^
 
 $(BUILD_DIR)/kernel/%.o: %.asm
 	@mkdir -p $(@D)

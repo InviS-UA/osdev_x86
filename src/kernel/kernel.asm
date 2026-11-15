@@ -8,6 +8,8 @@ global start
 start:
     cli
 
+    mov byte [BootDrive], dl
+
     mov ax, ds
     mov ss, ax
     mov sp, 0xFFF0
@@ -21,11 +23,13 @@ start:
     cli
     hlt
 
+section .text
+global print
+
 ;
 ; Prints string to the screen
 ;   ds:si <- target string
 ;
-global print
 print:
     push bp
     mov bp, sp
@@ -110,3 +114,9 @@ KbdControllerDisableKeyboard        equ 0xAD
 KbdControllerEnableKeyboard         equ 0xAE
 KbdControllerReadCtrlOutputPort     equ 0xD0
 KbdControllerWriteCtrlOutputPort    equ 0xD1
+
+section .data
+
+global BootDrive
+
+BootDrive: db 0
