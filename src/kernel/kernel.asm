@@ -1,6 +1,15 @@
 bits 16
 
+section .data
+
+global BootDrive
+
+BootDrive: db 0
+
 section .entry
+
+extern _end
+extern _bss_seg
 
 extern main
 global start
@@ -22,43 +31,6 @@ start:
 
     cli
     hlt
-
-section .text
-global print
-
-;
-; Prints string to the screen
-;   ds:si <- target string
-;
-print:
-    push bp
-    mov bp, sp
-
-    push ax
-    push bx
-    push si
-
-    mov si, [bp + 4]
-
-.loop:
-    lodsb
-    or al, al
-    jz .ret
-
-    mov ah, 0Eh
-    mov bh, 0
-    int 0x10
-
-    jmp .loop
-
-.ret:
-    pop si
-    pop bx
-    pop ax
-    
-    mov sp, bp
-    pop bp
-    ret
 
 EnableA20:
     ; disable keyboard
@@ -114,9 +86,3 @@ KbdControllerDisableKeyboard        equ 0xAD
 KbdControllerEnableKeyboard         equ 0xAE
 KbdControllerReadCtrlOutputPort     equ 0xD0
 KbdControllerWriteCtrlOutputPort    equ 0xD1
-
-section .data
-
-global BootDrive
-
-BootDrive: db 0

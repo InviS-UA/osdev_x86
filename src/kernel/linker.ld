@@ -6,11 +6,10 @@ SECTIONS
 {
     . = phys;
 
-    .entry              : { __entry_start = .;      *(.entry)   }
-    .text               : { __text_start = .;       *(.text)    }
-    .data               : { __data_start = .;       *(.data)    }
-    .rodata             : { __rodata_start = .;     *(.rodata)  }
-    .bss                : { __bss_start = .;        *(.bss)     }
-    
-    __end = .;
+    .entry              : { _entry_seg = .;      *(.entry)   }
+    .text               : { _text_seg =  .;       *(.text)   }
+    .data               : { _data_seg =  .;       *(.data)   }
+    .bss                : { _bss_seg =   .;        *(.bss)   }
+
+    _end = .;
 }

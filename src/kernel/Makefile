@@ -1,6 +1,7 @@
-ASMFLAGS += -I$(PROJ_DIR)/include -f elf32
+ASMFLAGS += -f elf
 CFLAGS += -I$(PROJ_DIR)/include -ffreestanding -nostdlib
 LINKFLAGS += -Tlinker.ld -nostdlib
+LIBS += -lgcc
 
 SRC_FILES=$(shell find -L . -type f)
 C_FILES=$(filter %.c, $(SRC_FILES))
@@ -14,7 +15,7 @@ all: $(BUILD_DIR)/kernel.sys
 
 $(BUILD_DIR)/kernel.sys: $(OBJ_FILES)
 	@echo "LD " $@
-	@$(LINK) $(LINKFLAGS) -Wl,-Map=$(BUILD_DIR)/kernel.map -o $@ $^
+	@$(LINK) $(LINKFLAGS) -Wl,-Map=$(BUILD_DIR)/kernel.map -o $@ $^ $(LIBS)
 
 $(BUILD_DIR)/kernel/%.o: %.asm
 	@mkdir -p $(@D)

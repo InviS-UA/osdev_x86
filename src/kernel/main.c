@@ -1,6 +1,9 @@
-void print(const char*);
+#include <stdint.h>
+#include <prf.h>
+
+extern uint8_t BootDrive;
 
 void main()
 {
-    print("Hello from C kernel!\r\n");
+    printf("BootDrive = %xh\r\n", BootDrive);
 }
