@@ -5,5 +5,6 @@ extern u8 BootDrive;
 
 void main()
 {
-    puts("Hello world!\r\n");
+    printf("LOADING...\r\n");
+    printf("BootDrive=%xh\r\n", BootDrive);
 }

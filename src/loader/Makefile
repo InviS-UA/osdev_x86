@@ -13,7 +13,7 @@ all: $(BUILD_DIR)/loader.bin
 
 $(BUILD_DIR)/loader.bin: $(OBJ_ASM) $(OBJ_C)
 	@echo "LD " $@
-	@$(LD16) $(LDFLAGS16) -o $@ $^
+	@$(LD16) $(LDFLAGS16) -o $@ $^ -lgcc
 
 $(BUILD_DIR)/loader/%.o: %.c
 	@mkdir -p $(@D)
