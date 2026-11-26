@@ -2,4 +2,4 @@
 
 #include <common.h>
 
-void x86_wrt_chr_tty(char c);
+void x86_tty_write(char c);

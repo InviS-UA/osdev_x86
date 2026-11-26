@@ -1,7 +1,7 @@
 bits 16
 
-global x86_wrt_chr_tty
-x86_wrt_chr_tty:
+global x86_tty_write
+x86_tty_write:
     push bp
     mov bp, sp
 
@@ -9,7 +9,7 @@ x86_wrt_chr_tty:
 
     mov ah, 0Eh
     mov al, [bp + 4]
-    mov bh, 0
+    mov bx, 0x0007
     int 10h
     
     pop bx

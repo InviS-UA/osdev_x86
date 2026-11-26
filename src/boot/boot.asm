@@ -54,6 +54,8 @@ start:
     mov ds, ax
     mov es, ax
 
+    mov dl, [DriveNumber]
+
     jmp 0x0:0x500
 
 .halt:

@@ -3,5 +3,8 @@
 
 void puts(const char* str)
 {
-    while (*str) x86_wrt_chr_tty(*(str++));
+    while (*str) {
+        x86_tty_write(*str);
+        str++;
+    }
 }
