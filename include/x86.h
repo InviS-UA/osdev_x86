@@ -1,3 +1,5 @@
 #pragma once
 
-void _cdecl x86_con(char c);
+#include <common.h>
+
+void x86_wrt_chr_tty(char c);

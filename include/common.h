@@ -1,5 +1,7 @@
 #pragma once
 
+#define FAR __far
+
 typedef signed char i8;
 typedef unsigned char u8;
 

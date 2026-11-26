@@ -1,16 +1,16 @@
 bits 16
 
-section _ENTRY class=CODE
+section .entry
 
-extern main_
-extern BootDrive_
+extern main
+extern BootDrive
 
-global _cstart_
+global _start
 
-_cstart_:
+_start:
     cli
 
-    mov byte [BootDrive_], dl
+    mov byte [BootDrive], dl
 
     mov ax, 0x3000
     mov ss, ax
@@ -20,7 +20,7 @@ _cstart_:
 
     sti
     
-    call main_
+    call main
 
 .halt:
     cli
@@ -81,4 +81,4 @@ KbdControllerEnableKeyboard         equ 0xAE
 KbdControllerReadCtrlOutputPort     equ 0xD0
 KbdControllerWriteCtrlOutputPort    equ 0xD1
 
-BootDrive_: db 0
+BootDrive: db 0

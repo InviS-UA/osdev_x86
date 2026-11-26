@@ -1,24 +1,26 @@
-ASMFLAGS += -f obj
-CFLAGS16 += -I$(PROJ_DIR)/include -0 -d3 -s -wx -ms -zl -zq -fr
+ASMFLAGS += -f elf
+CFLAGS16 += -I$(PROJ_DIR)/include -ffreestanding -nostdlib
+LDFLAGS16 += -nostdlib -Tlinker.ld -Wl,-Map=$(BUILD_DIR)/loader.map
 
 SRC_C=$(wildcard *.c)
 SRC_ASM=$(wildcard *.asm)
-OBJ_C=$(patsubst %.c, $(BUILD_DIR)/loader/c/%.obj, $(SRC_C))
-OBJ_ASM=$(patsubst %.asm, $(BUILD_DIR)/loader/asm/%.obj, $(SRC_ASM))
+OBJ_C=$(patsubst %.c, $(BUILD_DIR)/loader/c/%.o, $(SRC_C))
+OBJ_ASM=$(patsubst %.asm, $(BUILD_DIR)/loader/asm/%.o, $(SRC_ASM))
 
 .PHONY: all
 
 all: $(BUILD_DIR)/loader.bin
 
 $(BUILD_DIR)/loader.bin: $(OBJ_ASM) $(OBJ_C)
-	$(LD16) NAME $(BUILD_DIR)/loader.bin FILE \{ $^ \} OPTION MAP=$(BUILD_DIR)/loader.map @linker.lnk
+	@echo "LD " $@
+	@$(LD16) $(LDFLAGS16) -o $@ $^
 
-$(BUILD_DIR)/loader/c/%.obj: %.c
+$(BUILD_DIR)/loader/c/%.o: %.c
 	@mkdir -p $(@D)
 	@echo "CC " $@
-	@$(CC16) $(CFLAGS16) -fo=$@ $<
+	@$(CC16) $(CFLAGS16) -c -o $@ $<
 
-$(BUILD_DIR)/loader/asm/%.obj: %.asm
+$(BUILD_DIR)/loader/asm/%.o: %.asm
 	@mkdir -p $(@D)
 	@echo "ASM" $@
 	@$(ASM) $(ASMFLAGS) -o $@ $<

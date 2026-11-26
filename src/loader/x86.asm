@@ -1,7 +1,7 @@
-section _TEXT class=CODE
+bits 16
 
-global _x86_con
-_x86_con:
+global x86_wrt_chr_tty
+x86_wrt_chr_tty:
     push bp
     mov bp, sp
 

@@ -1,5 +1,5 @@
-#include <portab.h>
-#include <stdio.h>
+#include <common.h>
+#include <print.h>
 
 extern u8 BootDrive;
 
