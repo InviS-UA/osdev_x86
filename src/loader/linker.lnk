@@ -1,7 +1,7 @@
 FORMAT RAW BIN
 OPTION QUIET,
     NODEFAULTLIBS,
-    START=_start,
+    START=_cstart_,
     VERBOSE,
     OFFSET=0x500,
     STACK=0x200

@@ -5,11 +5,9 @@ section _ENTRY class=CODE
 extern main_
 extern BootDrive_
 
-global _start
 global _cstart_
 
 _cstart_:
-_start:
     cli
 
     mov byte [BootDrive_], dl
