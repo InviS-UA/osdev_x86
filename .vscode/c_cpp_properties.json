@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "WATCOM",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include/**"
+            ],
+            "defines": [
+                "far=",
+                "_cdecl="
+            ],
+            "compilerPath": "/home/invis/watcom/binl64/wcc",
+            "cStandard": "c99",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerArgs": [
+                "-0 -d3 -s -wx -ms -zl -zq -za99 -fr"
+            ]
+        }
+    ],
+    "version": 4
+}

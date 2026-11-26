@@ -1,8 +1,18 @@
-org 0x500
 bits 16
 
-start:
+section _ENTRY class=CODE
+
+extern main_
+extern BootDrive_
+
+global _start
+global _cstart_
+
+_cstart_:
+_start:
     cli
+
+    mov byte [BootDrive_], dl
 
     mov ax, 0x3000
     mov ss, ax
@@ -11,35 +21,12 @@ start:
     call EnableA20
 
     sti
-
-    mov si, msg
-    call Print
+    
+    call main_
 
 .halt:
     cli
     jmp .halt
-
-Print:
-    push ax
-    push bx
-    push si
-
-.loop:
-    lodsb
-    or al, al
-    jz .ret
-
-    mov ah, 0Eh
-    mov bh, 0
-    int 0x10
-
-    jmp .loop
-
-.ret:
-    pop si
-    pop bx
-    pop ax
-    ret
 
 EnableA20:
     ; disable keyboard
@@ -96,4 +83,4 @@ KbdControllerEnableKeyboard         equ 0xAE
 KbdControllerReadCtrlOutputPort     equ 0xD0
 KbdControllerWriteCtrlOutputPort    equ 0xD1
 
-msg: db 'Hello from loader!', 13, 10, 0
+BootDrive_: db 0
