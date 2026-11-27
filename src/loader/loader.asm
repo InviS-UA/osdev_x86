@@ -1,6 +1,6 @@
 bits 16
 
-section .entry
+section .text.entry
 
 extern main
 extern BootDrive

@@ -22,14 +22,4 @@ void main()
            bootdrv.cylinders,
            bootdrv.heads,
            bootdrv.sectors);
-    
-    printf("LOADER: Read from boot drive: lba=%d sectors=%d\r\n", bootdrv.id, 34, 1);
-
-    if (!drv_read(&bootdrv, 34, 1, data)) {
-        printf("Drive read error!\r\n");
-        return;
-    }
-
-    for (usize i = 0; i < 512; i++)
-        printf("%c", data[i]);
 }

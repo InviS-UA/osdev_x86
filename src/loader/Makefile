@@ -1,5 +1,5 @@
 ASMFLAGS += -f elf
-CFLAGS16 += -I$(PROJ_DIR)/include -ffreestanding -nostdlib
+CFLAGS16 += -I$(PROJ_DIR)/include -ffreestanding -nostdlib -mcmodel=small
 LDFLAGS16 += -nostdlib -Tlinker.ld -Wl,-Map=$(BUILD_DIR)/loader.map
 
 SRC_C=$(wildcard *.c)
